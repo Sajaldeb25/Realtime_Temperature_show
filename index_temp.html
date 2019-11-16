@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tempareture show</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="script.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        console.log('Sajal');
+        $(function () {
+            
+            var socket = io.connect("http://localhost:3000");
+            // Gets a change whenever the temperature sensor changes and sets it to its element
+            socket.on('temperature', function(temperature) {
+                //console.log('a user connected');
+                $("#termometer").val(temperature + "°C");
+            });
+            socket.on('temperature', function(temperature1) {
+                // console.log('a user connected');
+                $("#termometer1").val(temperature1 + "K");
+            });
+
+             socket.on('temperature', function(temperature2) {
+                    // console.log('a user connected');
+                $("#termometer2").val(temperature2 + "°F");
+            });
+
+        });
+    </script>
+
+  </head>
+  <body>
+         <p>
+			<label>Temperature in cel: </label>
+			<input type="text" id="termometer" readonly style="border:1; color:#0339fc; font-weight:bold; margin: 20px">
+        </p>
+        <p>
+            <label>Temperature in Fer: </label>
+            <input type="text" id="termometer1" readonly style="border:1; color:#0339fc; font-weight:bold; margin: 20px">
+        </p>
+
+        <p>
+            <label>Temperature in kel: </label>
+            <input type="text" id="termometer2" readonly style="border:1; color:#0339fc; font-weight:bold; margin: 20px">
+        </p>
+   
+  </body>
+</html>
