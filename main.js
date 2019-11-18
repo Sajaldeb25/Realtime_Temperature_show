@@ -12,7 +12,18 @@ http.listen(3000, function(){
 
 
 var five = require('johnny-five'), arduino = five.Board();
-var temperature;
+var temperature, light_pin_led;
+
+
+
+
+io.on('connection', function(socket){
+  socket.on('light_status', function(state) {
+    console.log('Light_status is: ' + state);
+    light_pin_led.toggle();
+  });
+});
+
 
 
 arduino.on('ready', function() {
@@ -21,15 +32,17 @@ arduino.on('ready', function() {
 		pin: 'A0'
     });
     
+    light_pin_led = new five.Led(13);
+    light_pin_led.off();
     
     temperature.on("data", function () {
         io.sockets.emit('temperature', this.celsius);
         io.sockets.emit('temperature1', this.kelvin);
         io.sockets.emit('temperature2', this.fahrenheit);
-        console.log('temperature in Cel: ' + this.celsius);
-        console.log('temperature in kel: ' + this.kelvin);
-        console.log('temperature in Fer: ' + this.fahrenheit);
-        console.log('--------------------------------------');
+      //console.log('temperature in Cel: ' + this.celsius);
+      //  console.log('temperature in kel: ' + this.kelvin);
+      //  console.log('temperature in Fer: ' + this.fahrenheit);
+      //  console.log('--------------------------------------');
     });
 
 });
