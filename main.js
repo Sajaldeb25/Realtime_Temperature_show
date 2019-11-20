@@ -7,23 +7,23 @@ app.get('/', function(req, res){
   });
 
 http.listen(3000, function(){
-   console.log('listening on *:3000');
+   console.log('http://localhost:3000');
 });
-
 
 var five = require('johnny-five'), arduino = five.Board();
 var temperature, light_pin_led;
 
-
-
-
 io.on('connection', function(socket){
   socket.on('light_status', function(state) {
-    console.log('Light_status is: ' + state);
+    //console.log('Light_status is: ' + state);
     light_pin_led.toggle();
   });
-});
 
+  console.log(socket.connected);
+  io.sockets.emit('c_msg','Connected');
+  
+  console.log(socket.disconnected);
+});
 
 
 arduino.on('ready', function() {
