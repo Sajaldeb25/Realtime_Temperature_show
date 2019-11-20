@@ -18,12 +18,12 @@
                 $("#termometer").val(temperature + "°C");
             });
             console.log('In the function --> Finding value');
-            socket.on('temperature', function(temperature1) {
+            socket.on('temperature1', function(temperature1) {
                 // console.log('a user connected');
                 $("#termometer1").val(temperature1 + "K");
             });
 
-            socket.on('temperature', function(temperature2) {
+            socket.on('temperature2', function(temperature2) {
                  // console.log('a user connected');
                 $("#termometer2").val(temperature2 + "°F");
             });
@@ -35,16 +35,30 @@
             });
             socket.on('light_status', function() { changeBtnState("#light_button", "#light_status") });
             
+            socket.on('c_msg', function(c_msg){
+                $("#connection_status").val(c_msg);
+            });
+
+            socket.on('reconnecting', () => {
+                $("#connection_status").val("Reconnectting....");
+            });
+
+            socket.on('disconnect', () => {
+                $("#connection_status").val("Disconnected.");
+            });
 
             function changeBtnState(btn, input) {
                 var btnClass = $(btn).attr('class');
                 var text, state, newBtnClass, oldBtnClass;
+                
                 if(btnClass === "btn btn-success") {
                 oldBtnClass = 'btn-success';
                 newBtnClass = 'btn-danger';
                 text = 'off';
                 state = "On";
-                } else if(btnClass === "btn btn-danger") {
+                } 
+                
+                else if(btnClass === "btn btn-danger") {
                 oldBtnClass = 'btn-danger';
                 newBtnClass = 'btn-success';
                 text = 'on';
@@ -64,20 +78,24 @@
   </head>
   <body>
       <h2>Temperature</h2>
-         <p>
-			<label>Temperature in cel: </label>
-			<input type="text" id="termometer" readonly style="border:0; color:#0339fc; font-weight:bold; margin: 20px">
+        <p>
+            <label>Connection is: </label>
+            <input type="text" id="connection_status" style="border: 0;color: #0339fc" value="Not connected" ><br>
         </p>
         <p>
-            <label>Temperature in Fer: </label>
-            <input type="text" id="termometer1" readonly style="border:0; color:#0339fc; font-weight:bold; margin: 20px">
+			<label style="padding-left: 50px;">In celsius: </label>
+			<input type="text" id="termometer" readonly style="border:0; color:#0339fc; font-weight:bold; margin: 5px">
+        </p>
+        <p>
+            <label style="padding-left: 50px;">In fahrenheit: </label>
+            <input type="text" id="termometer1" readonly style="border:0; color:#0339fc; font-weight:bold; margin: 5px">
         </p>
 
         <p>
-            <label>Temperature in kel: </label>
-            <input type="text" id="termometer2" readonly style="border:0; color:#0339fc; font-weight:bold; margin: 20px">
+            <label style="padding-left: 50px;">In kelvin: </label>
+            <input type="text" id="termometer2" readonly style="border:0; color:#0339fc; font-weight:bold; margin: 5px">
         </p>
-        <p>
+        <p style="padding-left: 50px;">
             <label>Light is: </label>
             <input type="text" id="light_status" style="border: 0;color: #0339fc" value="off" ><br>
             <button type="button" class="btn btn-success" id="light_button" href="#">LED ON/OFF</button>
