@@ -2,9 +2,9 @@
 <html>
   <head>
     <title>Tempareture show</title>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="script.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
@@ -12,19 +12,16 @@
         $(function () {
             
             var socket = io.connect("http://localhost:3000");
-            // Gets a change whenever the temperature sensor changes and sets it to its element
+            
             socket.on('temperature', function(temperature) {
-                //console.log('a user connected');
                 $("#termometer").val(temperature + "°C");
             });
             console.log('In the function --> Finding value');
             socket.on('temperature1', function(temperature1) {
-                // console.log('a user connected');
                 $("#termometer1").val(temperature1 + "K");
             });
 
             socket.on('temperature2', function(temperature2) {
-                 // console.log('a user connected');
                 $("#termometer2").val(temperature2 + "°F");
             });
 
@@ -73,6 +70,9 @@
             }
 
         });
+    
+    
+    
     </script>
 
   </head>
@@ -84,7 +84,7 @@
         </p>
         <p>
 			<label style="padding-left: 50px;">In celsius: </label>
-			<input type="text" id="termometer" readonly style="border:0; color:#0339fc; font-weight:bold; margin: 5px">
+			<input type="text" id="termometer" readonly style="border:0; color:#0339fc; font-weight:bold; margin: 5px" value="31°C">
         </p>
         <p>
             <label style="padding-left: 50px;">In fahrenheit: </label>
@@ -101,5 +101,51 @@
             <button type="button" class="btn btn-success" id="light_button" href="#">LED ON/OFF</button>
             
          </p>
+
+
+
+            <!-- The core Firebase JS SDK is always required and must be listed first -->
+            <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-app.js"></script>
+            <!-- TODO: Add SDKs for Firebase products that you want to https://firebase.google.com/docs/web/setup#available-libraries -->
+            <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-analytics.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+
+            <script>
+                console.log("Firebase here.")
+                // Your web app's Firebase configuration
+                var firebaseConfig = {
+                    apiKey: "AIzaSyDLgFOUVcpwdJlFbdkuBHzEnjPJjee5Pts",
+                    authDomain: "project-temp-e7a54.firebaseapp.com",
+                    databaseURL: "https://project-temp-e7a54.firebaseio.com",
+                    projectId: "project-temp-e7a54",
+                    storageBucket: "project-temp-e7a54.appspot.com",
+                    messagingSenderId: "355226341693",
+                    appId: "1:355226341693:web:6971fbce0a39e970d53554",
+                    measurementId: "G-H8LKD98FMZ"
+                };
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+                firebase.analytics();
+
+                    var cel = document.getElementById('termometer').value;
+                    var kel = document.getElementById('termometer2').value;
+                    var fer = document.getElementById('termometer1').value;
+                    console.log("sss"+cel);
+
+                    var uid = firebase.database().ref().child('users').push().key;
+                    
+                    var data = {
+                        //user_id: uid,
+                        Kelvin: kel,
+                        Fahrenheit: fer,
+                        Celsius: cel
+                    }
+                    
+                    var updates = {};
+                    updates['/Temp/' + uid] = data;
+                    firebase.database().ref().update(updates);
+
+            </script>
+
   </body>
 </html>
