@@ -15,6 +15,18 @@
             
             socket.on('temperature', function(temperature) {
                 $("#termometer").val(temperature + "°C");
+                
+                //console.log(temperature);
+                    // var cel = temperature;
+                    // var uid = firebase.database().ref().child('users').push().key;
+                    
+                    // var data = {
+                    //     Celsius: cel
+                    // }
+                    // var updates = {};
+                    // updates['/Temp/' + uid] = data;
+                    // firebase.database().ref().update(updates);
+
             });
             console.log('In the function --> Finding value');
             socket.on('temperature1', function(temperature1) {
@@ -24,6 +36,24 @@
             socket.on('temperature2', function(temperature2) {
                 $("#termometer2").val(temperature2 + "°F");
             });
+
+        
+            socket.on('temperature', function(temperature) {
+                        var cel = temperature;
+                        var kel = temperature+273.15;
+                        var far = (cel*1.8) +32 ;
+                        var uid = firebase.database().ref().child('users').push().key;
+                        var data = {
+                        
+                            Celsius: cel,
+                            Kelvin : kel,
+                            fahrenheit: far
+                        }
+                        var updates = {};
+                        updates['/Temper/' + uid] = data;
+                        firebase.database().ref().update(updates);
+            });
+
 
             $("#light_button").click(function() {
                 changeBtnState("#light_button", "#light_status");
@@ -65,7 +95,7 @@
                 $(btn).addClass(newBtnClass);
                 
                 $(btn).text("Turn " + text);
-                console.log(btn + " is " + state);
+                // console.log(btn + " is " + state);
                 $(input).val(state);
             }
 
@@ -101,9 +131,7 @@
             <button type="button" class="btn btn-success" id="light_button" href="#">LED ON/OFF</button>
             
          </p>
-
-
-
+         
             <!-- The core Firebase JS SDK is always required and must be listed first -->
             <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-app.js"></script>
             <!-- TODO: Add SDKs for Firebase products that you want to https://firebase.google.com/docs/web/setup#available-libraries -->
@@ -111,7 +139,7 @@
             <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 
             <script>
-                console.log("Firebase here.")
+                //console.log("Firebase here.")
                 // Your web app's Firebase configuration
                 var firebaseConfig = {
                     apiKey: "AIzaSyDLgFOUVcpwdJlFbdkuBHzEnjPJjee5Pts",
@@ -126,25 +154,6 @@
                 // Initialize Firebase
                 firebase.initializeApp(firebaseConfig);
                 firebase.analytics();
-
-                    var cel = document.getElementById('termometer').value;
-                    var kel = document.getElementById('termometer2').value;
-                    var fer = document.getElementById('termometer1').value;
-                    console.log("sss"+cel);
-
-                    var uid = firebase.database().ref().child('users').push().key;
-                    
-                    var data = {
-                        //user_id: uid,
-                        Kelvin: kel,
-                        Fahrenheit: fer,
-                        Celsius: cel
-                    }
-                    
-                    var updates = {};
-                    updates['/Temp/' + uid] = data;
-                    firebase.database().ref().update(updates);
-
             </script>
 
   </body>

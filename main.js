@@ -10,7 +10,7 @@ http.listen(3000, function(){
    console.log('http://localhost:3000');
 });
 
-var five = require('johnny-five'), arduino = five.Board();
+var five = require('johnny-five'), arduino =  new five.Board({ port: "COM7" });
 var temperature, light_pin_led;
 
 io.on('connection', function(socket){
